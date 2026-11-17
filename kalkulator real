@@ -1,0 +1,71 @@
+
+import tkinter as tk
+
+# Membuat jendela kalkulator
+root = tk.Tk()
+root.title("Kalkulator Saya")
+root.geometry("320x430")
+root.resizable(False, False)
+
+# Tampilan layar
+layar = tk.Entry(
+    root,
+    font=("Arial", 24),
+    justify="right",
+    bd=10
+)
+layar.pack(fill="x", padx=10, pady=15)
+
+# Fungsi tombol
+def klik(nilai):
+    layar.insert(tk.END, nilai)
+
+def hapus():
+    layar.delete(0, tk.END)
+
+def hitung():
+    try:
+        hasil = eval(layar.get())
+        layar.delete(0, tk.END)
+        layar.insert(0, str(hasil))
+    except ZeroDivisionError:
+        layar.delete(0, tk.END)
+        layar.insert(0, "Tidak bisa dibagi 0")
+    except:
+        layar.delete(0, tk.END)
+        layar.insert(0, "Error")
+
+# Tombol kalkulator
+tombol = [
+    ("7", "8", "9", "/"),
+    ("4", "5", "6", "*"),
+    ("1", "2", "3", "-"),
+    ("0", ".", "=", "+")
+]
+
+for baris in tombol:
+    frame = tk.Frame(root)
+    frame.pack(expand=True, fill="both")
+
+    for teks in baris:
+        if teks == "=":
+            perintah = hitung
+        else:
+            perintah = lambda x=teks: klik(x)
+
+        tk.Button(
+            frame,
+            text=teks,
+            font=("Arial", 18),
+            command=perintah
+        ).pack(side="left", expand=True, fill="both")
+
+# Tombol hapus
+tk.Button(
+    root,
+    text="CLEAR",
+    font=("Arial", 16),
+    command=hapus
+).pack(fill="both", padx=10, pady=10)
+
+root.mainloop()
